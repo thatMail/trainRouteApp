@@ -59,29 +59,35 @@ function App() {
 };
 
   return (
-    <div>
-      <h1>Train Route Planner</h1>
-      <div>
-        <label>Start Station:</label>
-        <select value={startStation} onChange={e => setStartStation(e.target.value)}>
-          {stations.map(station => (
-            <option key={station.id} value={station.name}>{station.name}</option>
-          ))}
-        </select>
+    <div class="d-flex justify-content-center vh-100">
+      <div class="centered-content w-100">
+        <header class="d-flex align-items-center pb-3 mb-5 border-bottom">
+          <h1>Route Planner</h1>
+        </header>
+        <main>
+            <div>
+              <label>Start Station:</label>
+              <select value={startStation} onChange={e => setStartStation(e.target.value)}>
+                {stations.map(station => (
+                  <option key={station.id} value={station.name}>{station.name}</option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label>End Station:</label>
+              <select value={endStation} onChange={e => setEndStation(e.target.value)}>
+                {stations.map(station => (
+                  <option key={station.id} value={station.name}>{station.name}</option>
+                ))}
+              </select>
+            </div>
+            <button onClick={planRoute}>Plan Route</button>
+            <div>
+              Shortest Path: {plannedRoute.join(' -> ')}
+            </div>
+        </main>
       </div>
-      <div>
-        <label>End Station:</label>
-        <select value={endStation} onChange={e => setEndStation(e.target.value)}>
-          {stations.map(station => (
-            <option key={station.id} value={station.name}>{station.name}</option>
-          ))}
-        </select>
-      </div>
-      <button onClick={planRoute}>Plan Route</button>
-      <div>
-        Shortest Path: {plannedRoute.join(' -> ')}
-      </div>
-    </div>
+  </div>
   );
 }
 

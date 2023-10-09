@@ -1,0 +1,26 @@
+//Import Fonts
+@import url('https://fonts.googleapis.com/css2?family=Young+Serif&display=swap');
+//Import Sass fucntions
+@import "../../node_modules/bootstrap/scss/functions";
+//Customisations
+$font-family-base: 'Young Serif', serif;
+$body-bg: #ffffff;
+$primary: #111111;
+
+//Import Bootstrap
+@import "../../node_modules/bootstrap/scss/bootstrap.scss";
+
+body {
+    background-color: #a7dfff;
+    background-image: url(../../public/img/bg.jpg);
+    background-repeat: no-repeat;
+    background-size: auto;
+    color:#111111;
+}
+.centered-content {
+    background-color: rgba($color: #ffffff, $alpha: 85%);
+    border: solid #111111;
+    border-radius: 2rem;
+    padding: 4rem;
+    margin: 4rem;
+}
