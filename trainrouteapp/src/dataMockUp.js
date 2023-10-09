@@ -85,3 +85,23 @@ export const stations = [
     { id: 18, lineId: 5, stationId: 11, stationOrder: 3, isClosed: false },
     { id: 19, lineId: 5, stationId: 12, stationOrder: 4, isClosed: false },
   ];
+
+   const connectionGraph = {
+    //weighting for station to station connections on a per station basis - required for Dijkstra
+    //StationId - Connecting StationId: Connection Weight
+    //All station connection weights set to 1 as proof of concept
+    A: { B: 1},
+    B: { A: 1, C: 1, D: 1, N: 1 },
+    C: { B: 1, D: 1, J: 1, M: 1 },
+    D: { C: 1, E: 1, F: 1, O: 1},
+    E: { D: 1 },
+    F: { D: 1 },
+    G: { O: 1},
+    H: { O: 1 },
+    J: { K: 1, O: 1 },
+    K: { J: 1 },
+    O: { D: 1, G: 1, H: 1, J: 1 },
+    M: { C: 1, D: 1, N: 1 },
+    N: { B: 1, M: 1 },
+};
+export default connectionGraph
