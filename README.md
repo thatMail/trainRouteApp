@@ -29,4 +29,4 @@ Handles station order for a line
 | routeId | lineId | stationId | stationOrder | isClosed |
 |----------|----------|----------|----------|----------|
 | INT PRIMARY KEY AUTO_INCREMENT | INT | INT | INT NOT NULL | BIT |
-| | FOREIGN KEY (lineId) REFERENCES lines(lineId) | FOREIGN KEY (stationId) REFERENCES stations(stationId)| |
+| | FOREIGN KEY (lineId) REFERENCES lines(lineId) | FOREIGN KEY (stationId) REFERENCES stations(stationId)| FOREIGN KEY (isClosed) REFERENCES stations(stationId)|
