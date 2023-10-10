@@ -64,6 +64,24 @@ function App() {
   const [endStation, setEndStation] = useState('A');
   const [plannedRoute, setPlannedRoute] = useState([]);
   const [isActive, setIsActive] = useState(true);
+  const [closedStations, setClosedStations] = useState([]);  // Now a state variable
+  const [closedLines, setClosedLines] = useState([]);        // Now a state variable
+
+  const toggleStationClosure = (station) => {
+    if (closedStations.includes(station)) {
+      setClosedStations(prevStations => prevStations.filter(s => s !== station));
+    } else {
+      setClosedStations(prevStations => [...prevStations, station]);
+    }
+  }
+  // Handle toggling a line's closed state
+  const toggleLineClosure = (line) => {
+    if (closedLines.includes(line)) {
+      setClosedLines(prevLines => prevLines.filter(l => l !== line));
+    } else {
+      setClosedLines(prevLines => [...prevLines, line]);
+    }
+  }
 
   const planRoute = () => {
     const { distances, paths } = dijkstra(connectionGraph, startStation, closedStations, closedLines);
@@ -146,11 +164,45 @@ return (
             </div>
           </div>
         </div>
-
+        
+        <br></br>
+        {/** Debug */}
+        <div class="accordion accordion-flush" id="debugMenu">
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="flush-headingOne">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                Debug Menu
+              </button>
+            </h2>
+            <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#debugMenu">
+              <div class="accordion-body">
+                {/* UI to toggle closed stations */}
+                <div>
+                      <h6>Toggle Closed Stations</h6>
+                      {Object.keys(connectionGraph).map(station => (
+                          <button onClick={() => toggleStationClosure(station)}>
+                              {station} {closedStations.includes(station) ? "(Closed)" : "(Open)"}
+                          </button>
+                      ))}
+                </div>
+                <br></br>
+                {/* UI to toggle closed lines */}
+                <div>
+                    <h6>Toggle Closed Lines</h6>
+                    {["Blue", "Pink", "Black", "Red", "Circular"].map(line => (
+                        <button onClick={() => toggleLineClosure(line)}>
+                            {line} {closedLines.includes(line) ? "(Closed)" : "(Open)"}
+                        </button>
+                    ))}
+                </div> 
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     {/** Footer */}
-    <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 mt-4 border-top sticky-bottom">
+    <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 mt-4 border-top">
       <p class="col-md-4 mb-0 text-muted"><a class="footerLink" href="https://github.com/thatMail/trainRouteApp"><FontAwesomeIcon icon={faGithub} size="xl" style={{ paddingRight: '1rem' }} />Luke Mayell</a></p>
     </footer>
   </div>
