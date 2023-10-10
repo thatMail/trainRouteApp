@@ -28,7 +28,11 @@ h1 {
 }
 .inputRight {
     border-radius: 0 1rem 1rem 0 !important;
+    padding-left: 0.75rem;
 }
 .submitBtn {
     padding: 0.375rem 0.75rem;
+}
+.returnedRoute {
+    display:none;
 }

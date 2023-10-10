@@ -104,5 +104,8 @@ export const stations = [
     M: { C: 1, D: 1, N: 1 },
     N: { B: 1, M: 1 },
 };
+  //Station and Line Closures (see db view in readme)
+  const closedStations = [''];  // Example: Station B is closed
+  const closedLines = [''];  // Example: Red line is closed
 
-export default connectionGraph;
+export { connectionGraph, closedStations, closedLines };
