@@ -93,18 +93,18 @@ export const stations = [
     A: { B: 1},
     B: { A: 1, C: 1, D: 1, N: 1 },
     C: { B: 1, D: 1, J: 1, M: 1 },
-    D: { C: 1, E: 1, F: 1, O: 1},
+    D: { B: 1, C: 1, E: 1, F: 1, M: 1, O: 1},
     E: { D: 1 },
     F: { D: 1 },
     G: { O: 1},
     H: { O: 1 },
-    J: { K: 1, O: 1 },
+    J: { C: 1, K: 1, O: 1},
     K: { J: 1 },
     O: { D: 1, G: 1, H: 1, J: 1 },
     M: { C: 1, D: 1, N: 1 },
     N: { B: 1, M: 1 },
 };
-  //Station and Line Closures (see db view in readme)
+  //Station and Line Closures (see db Views in readme)
   const closedStations = [''];  // Example: Station B is closed
   const closedLines = [''];  // Example: Red line is closed
 

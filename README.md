@@ -1,10 +1,9 @@
 # trainRouteApp
-A proof of concept Route Planner with example DB structure, making use of Dijkstra's <i>Shortest Path Algorithm</i> 
+A proof of concept Route Planner with example DB structure, making use of Dijkstra's <i>Shortest Path Algorithm</i> details <a href="https://www.freecodecamp.org/news/dijkstras-shortest-path-algorithm-visual-introduction/">here</a>.
 
-Shortest Path details: https://www.freecodecamp.org/news/dijkstras-shortest-path-algorithm-visual-introduction/
+For prototype data is stored in /trainrouteapp/src/dataMockUp.js
 
-
-## Database Structure
+## Proposed Database Structure
 ### Stations
 | stationId | stationName | isClosed |
 |----------|----------|----------|

@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import { connectionGraph, closedStations, closedLines, routes } from './dataMockUp';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import { faGithub } from '@fortawesome/free-brands-svg-icons';
 import map from './img/map.jpg';
 
 //Dijkstra Algorithm for shortest path calculations across map
@@ -78,17 +81,25 @@ function App() {
 };
 
 return (
-  <div class="container col-xl-10 col-xxl-8 px-4 py-5">
-    <div class="row align-items-center g-lg-5 py-5">
+  <div class="container col-xl-10 col-xxl-8 px-4">
+    {/** Introduction row */}
+    <div class="row align-items-center g-lg-5 pt-5">
       <div class="col-lg-7 text-center text-lg-start">
         <h1 class="display-1 fw-bold lh-1 text-body-emphasis mb-3"><i>Route</i>Planner</h1>
         <p class="col-lg-10 fs-4">A prototype Route Planner for the underground train network shown below:</p>
+      </div>
+    </div>
+    {/** Main row */}
+    <div class="row align-items-start g-lg-5 pb-5">
+      <div class="col-lg-7">
         <img src={map} class="img-fluid mb-4" alt="Map"></img>
         <p class="col-lg-10 fs-6">The route planner makes use of Dijkstra's <i>Shortest Path Algorithm</i> to work out the best route between stations on the network, more information on the algorithm can
         be found <a href="https://www.freecodecamp.org/news/dijkstras-shortest-path-algorithm-visual-introduction/">here</a></p>
       </div>
-
-      <div class="col-md-10 mx-auto col-lg-5 p-4 p-md-5 border rounded-3 bg-body-tertiary">
+      {/** Journey Seletcion */} 
+      <div class="col-lg-5 p-4 p-md-5 border rounded-3 bg-body-tertiary">
+        <h1 class="display-6 fw-bold lh-1 text-body-emphasis mb-4"><i>My</i>Journey</h1>
+        {/** From: */} 
         <div class="form-floating input-group mb-1">
           <div class="input-group-prepend col-2 col-md-3">
             <label class="input-group-text inputLeft" for="inputGroupSelect01">From: </label>
@@ -101,7 +112,7 @@ return (
             ))}
           </select>
         </div>
-
+        {/** To: */} 
         <div class="form-floating input-group mb-4">
           <div class="input-group-prepend col-2 col-md-3">
             <label class="input-group-text inputLeft" for="inputGroupSelect01">To: </label>
@@ -114,19 +125,34 @@ return (
             ))}
           </select>
         </div>
-
+        {/** Plan Route Button */}  
         <div class="form-floating input-group mb-4">
             <button class="rounded-4 submitBtn" onClick={planRoute}>Plan Route</button>
         </div>
-
+        {/** Route Results */}      
         <div id="routeResults" className={`${isActive ? "returnedRoute" : ""} row pt-2`}>
           <div class="col-lg-12">
-            <h3>Journey: </h3>{plannedRoute.join(' -> ')}
+            <h3>Journey: </h3>
+            <div className="journeyResult">
+              {/** Fragment rather than a join to avoid concatenation (lets us use the icon) */}
+              {plannedRoute.map((route, index) => (
+                <React.Fragment key={index}>
+                  {route}
+                  {index !== plannedRoute.length - 1 && 
+                      <FontAwesomeIcon icon={faArrowRight} size="2xs" style={{ color: "#ffffff", paddingRight: '1rem', paddingLeft: '1rem' }}/>
+                  }
+                </React.Fragment>
+              ))}
+            </div>
           </div>
         </div>
 
       </div>
     </div>
+    {/** Footer */}
+    <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 mt-4 border-top sticky-bottom">
+      <p class="col-md-4 mb-0 text-muted"><a class="footerLink" href="https://github.com/thatMail/trainRouteApp"><FontAwesomeIcon icon={faGithub} size="xl" style={{ paddingRight: '1rem' }} />Luke Mayell</a></p>
+    </footer>
   </div>
   );
 }
