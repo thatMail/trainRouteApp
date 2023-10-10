@@ -1,39 +1,39 @@
 import React, { useState } from 'react';
-import { connectionGraph, closedStations, closedLines, routes } from './dataMockUp';
+import { connectionGraph, routes } from './dataMockUp';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { faGithub } from '@fortawesome/free-brands-svg-icons';
 import map from './img/map.jpg';
 
 //Dijkstra Algorithm for shortest path calculations across map
-function dijkstra(connectionGraph, start, closedStations, closedLines) {
+function dijkstra(connectionGraph, startStation, endStation, routes, closedStations, closedLines) {
   const shortestDistances = {};
   const prevNodes = {};
   const unvisitedNodes = new Set(Object.keys(connectionGraph));
 
   // Set distances to infinity and previous nodes to null
   for (let node in connectionGraph) {
-      shortestDistances[node] = Infinity;
-      prevNodes[node] = null;
+    shortestDistances[node] = Infinity;
+    prevNodes[node] = null;
   }
-  shortestDistances[start] = 0;
+  shortestDistances[startStation] = 0;
 
   while (unvisitedNodes.size > 0) {
     let currentNode = getClosestNode(shortestDistances, unvisitedNodes);
 
-    for (let neighbor in connectionGraph[currentNode]) {
-      if (
-        closedStations.includes(neighbor) 
-        && isPartOfDifferentClosedLine(currentNode, neighbor, closedLines, routes)
-      ) {
-          continue;  // Exclude routes that pass through closed stations on different lines
+    for (let neighbour in connectionGraph[currentNode]) {
+      if (closedStations.includes(neighbour) && neighbour !== endStation) {
+        const nextStation = getNextStationAfterClosed(currentNode, neighbour, routes);
+        if (!nextStation || !isPartOfSameOpenLine(currentNode, nextStation, closedLines, routes)) {
+          continue; 
+        }
       }
 
-        let newDist = shortestDistances[currentNode] + connectionGraph[currentNode][neighbor];
-        if (newDist < shortestDistances[neighbor]) {
-            shortestDistances[neighbor] = newDist;
-            prevNodes[neighbor] = currentNode;
-        }
+      let newDist = shortestDistances[currentNode] + connectionGraph[currentNode][neighbour];
+      if (newDist < shortestDistances[neighbour]) {
+        shortestDistances[neighbour] = newDist;
+        prevNodes[neighbour] = currentNode;
+      }
     }
     unvisitedNodes.delete(currentNode);
   }
@@ -41,57 +41,38 @@ function dijkstra(connectionGraph, start, closedStations, closedLines) {
   return { distances: shortestDistances, paths: prevNodes };
 }
 
-//Check for closed lines
-function isPartOfClosedLine(currentNode, neighbor, closedLines, routes) {
-  // Find the line that connects currentNode and neighbor
-  const route = routes.find(route => 
-      (route.start_station === currentNode && route.end_station === neighbor) || 
-      (route.start_station === neighbor && route.end_station === currentNode)
-  );
-
-  // Return whether this line is in the list of closed lines
-  return route && closedLines.includes(route.line);
-}
-
 function getClosestNode(distances, unvisitedNodes) {
   return Array.from(unvisitedNodes).reduce((closestNode, node) => {
-      if (!closestNode || distances[node] < distances[closestNode]) {
-          return node;
-      }
-      return closestNode;
+    if (!closestNode || distances[node] < distances[closestNode]) {
+      return node;
+    }
+    return closestNode;
   }, null);
 }
 
-// work out of the path can continue through a closed station on the same line
-function isPartOfDifferentClosedLine(currentNode, neighbor, closedLines, routes) {
-  // Find the line that connects currentNode and neighbor
-  const route = routes.find(route => 
-      (route.start_station === currentNode && route.end_station === neighbor) || 
-      (route.start_station === neighbor && route.end_station === currentNode)
+//check next node after closed - see if we can travel onto it if it's open and on the same line
+function getNextStationAfterClosed(currentNode, closedStation, routes) {
+  const connectingRoutes = routes.filter(route => (route.start_station === closedStation && route.end_station !== currentNode) ||
+    (route.end_station === closedStation && route.start_station !== currentNode)
+  );
+  return connectingRoutes[0] ? (connectingRoutes[0].start_station === closedStation ? connectingRoutes[0].end_station : connectingRoutes[0].start_station) : null;
+}
+
+//check part of same line if travelling through closed station
+function isPartOfSameOpenLine(currentNode, neighbour, closedLines, routes) {
+  const connectingRoute = routes.find(route => 
+    (route.start_station === currentNode && route.end_station === neighbour) || 
+    (route.start_station === neighbour && route.end_station === currentNode)
   );
 
-  // Check if this line is in the list of closed lines
-  const lineIsClosed = route && closedLines.includes(route.line);
-
-  // If the line is not closed, then it's not part of a different closed line
-  if (!lineIsClosed) return false;
-
-  // Now, check if currentNode and neighbor are part of the same closed line
-  const neighborLines = routes.filter(route => 
-      route.start_station === neighbor || route.end_station === neighbor
-  ).map(route => route.line);
-
-  const currentNodeLines = routes.filter(route => 
-      route.start_station === currentNode || route.end_station === currentNode
-  ).map(route => route.line);
-
-  // If both currentNode and neighbor share a line that's not closed, then they are part of the same open line
-  for (let line of currentNodeLines) {
-      if (neighborLines.includes(line) && !closedLines.includes(line)) {
-          return false;
-      }
+  if (!connectingRoute) {
+    return false;
   }
 
+  if (closedLines.includes(connectingRoute.line)) {
+    return false; // If the line itself is closed, they can't be on the same open line
+  }
+  // If reached this point, they're on the same open line
   return true;
 }
 
@@ -100,8 +81,8 @@ function App() {
   const [endStation, setEndStation] = useState('A');
   const [plannedRoute, setPlannedRoute] = useState([]);
   const [isActive, setIsActive] = useState(true);
-  const [closedStations, setClosedStations] = useState([]);  // Now a state variable
-  const [closedLines, setClosedLines] = useState([]);        // Now a state variable
+  const [closedStations, setClosedStations] = useState([]);  //used for debug
+  const [closedLines, setClosedLines] = useState([]);        //used for debug
 
   const toggleStationClosure = (station) => {
     if (closedStations.includes(station)) {
@@ -120,13 +101,13 @@ function App() {
   }
 
   const planRoute = () => {
-    const { distances, paths } = dijkstra(connectionGraph, startStation, closedStations, closedLines);
+    const shortestPath = dijkstra(connectionGraph, startStation, endStation, routes, closedStations, closedLines);
     let path = [];
     let currentNode = endStation;
 
     while (currentNode) {
-        path.push(currentNode);
-        currentNode = paths[currentNode];
+      path.push(currentNode);
+      currentNode = shortestPath.paths[currentNode];
     }
     path.reverse();
 
@@ -156,32 +137,32 @@ return (
         {/** From: */} 
         <div className="form-floating input-group mb-1">
           <div className="input-group-prepend col-2 col-md-3">
-            <label className="input-group-text inputLeft" for="inputGroupSelect01">From: </label>
+            <label className="input-group-text inputLeft" htmlFor="inputGroupSelect01">From: </label>
           </div>
           <select className="custom-select inputRight" value={startStation} onChange={e => setStartStation(e.target.value)}>
             {Object.keys(connectionGraph).map(station => (
-                <option key={station} value={station} disabled={closedStations.includes(station)}>
-                    {station} {closedStations.includes(station) ? "(Closed)" : ""}
-                </option>
+              <option key={station} value={station} disabled={closedStations.includes(station)}>
+                {station} {closedStations.includes(station) ? "(Closed)" : ""}
+              </option>
             ))}
           </select>
         </div>
         {/** To: */} 
         <div className="form-floating input-group mb-4">
           <div className="input-group-prepend col-2 col-md-3">
-            <label className="input-group-text inputLeft" for="inputGroupSelect01">To: </label>
+            <label className="input-group-text inputLeft" htmlFor="inputGroupSelect01">To: </label>
           </div>
           <select className="custom-select inputRight" value={endStation} onChange={e => setEndStation(e.target.value)}>
             {Object.keys(connectionGraph).map(station => (
-                <option key={station} value={station} disabled={closedStations.includes(station)}>
-                    {station} {closedStations.includes(station) ? "(Closed)" : ""}
-                </option>
+              <option key={station} value={station} disabled={closedStations.includes(station)}>
+                {station} {closedStations.includes(station) ? "(Closed)" : ""}
+              </option>
             ))}
           </select>
         </div>
         {/** Plan Route Button */}  
         <div className="form-floating input-group mb-4">
-            <button className="rounded-4 submitBtn" onClick={planRoute}>Plan Route</button>
+          <button className="rounded-4 submitBtn" onClick={planRoute}>Plan Route</button>
         </div>
         {/** Route Results */}      
         <div id="routeResults" className={`${isActive ? "returnedRoute" : ""} row pt-2`}>
@@ -214,23 +195,31 @@ return (
               <div className="accordion-body">
                 {/* UI to toggle closed stations */}
                 <div>
-                      <h6>Toggle Closed Stations</h6>
-                      {Object.keys(connectionGraph).map(station => (
-                          <button onClick={() => toggleStationClosure(station)}>
-                              {station} {closedStations.includes(station) ? "(Closed)" : "(Open)"}
-                          </button>
-                      ))}
+                  <h6>Toggle Closed Stations</h6>
+                  {Object.keys(connectionGraph).map(station => (
+                    <button onClick={() => toggleStationClosure(station)}>
+                      {station} {closedStations.includes(station) ? "(Closed)" : "(Open)"}
+                    </button>
+                  ))}
                 </div>
                 <br></br>
                 {/* UI to toggle closed lines */}
                 <div>
-                    <h6>Toggle Closed Lines</h6>
-                    {["Blue", "Pink", "Black", "Red", "Circular"].map(line => (
-                        <button onClick={() => toggleLineClosure(line)}>
-                            {line} {closedLines.includes(line) ? "(Closed)" : "(Open)"}
-                        </button>
-                    ))}
-                </div> 
+                  <h6>Toggle Closed Lines</h6>
+                  {["Blue", "Pink", "Black", "Red", "Circular"].map(line => (
+                    <button onClick={() => toggleLineClosure(line)}>
+                      {line} {closedLines.includes(line) ? "(Closed)" : "(Open)"}
+                    </button>
+                  ))}
+                </div>
+                <br></br><br></br>
+                <h6>Known issues</h6>
+                <ul class="list-group">
+                  <li class="list-group-item">Line Closures not respected in path finding.</li>
+                  <li class="list-group-item">Journey's which require passing through a closed station get borked.<br></br><br></br>
+                  <p>This will be down to path finding logic not properly working out if the nodes, before and after the closed station, are on the same line and allowing the path to pass through.</p>
+                </li>
+              </ul>
               </div>
             </div>
           </div>
