@@ -17,11 +17,11 @@ function dijkstra(connectionGraph, start) {
   while (unvisitedNodes.size > 0) {
       let currentNode = getClosestNode(shortestDistances, unvisitedNodes);
 
-      for (let neighbor in connectionGraph[currentNode]) {
-          let newDist = shortestDistances[currentNode] + connectionGraph[currentNode][neighbor];
-          if (newDist < shortestDistances[neighbor]) {
-              shortestDistances[neighbor] = newDist;
-              prevNodes[neighbor] = currentNode;
+      for (let neighbour in connectionGraph[currentNode]) {
+          let newDist = shortestDistances[currentNode] + connectionGraph[currentNode][neighbour];
+          if (newDist < shortestDistances[neighbour]) {
+              shortestDistances[neighbour] = newDist;
+              prevNodes[neighbour] = currentNode;
           }
       }
       unvisitedNodes.delete(currentNode);
@@ -59,35 +59,48 @@ function App() {
 };
 
   return (
-    <div class="d-flex justify-content-center vh-100">
-      <div class="centered-content w-100">
-        <header class="d-flex align-items-center pb-3 mb-5 border-bottom">
-          <h1>Route Planner</h1>
-        </header>
-        <main>
-            <div>
-              <label>Start Station:</label>
-              <select value={startStation} onChange={e => setStartStation(e.target.value)}>
-                {stations.map(station => (
-                  <option key={station.id} value={station.name}>{station.name}</option>
-                ))}
-              </select>
+    //
+    <div class="container col-xl-10 col-xxl-8 px-4 py-5">
+      <div class="row align-items-center g-lg-5 py-5">
+        <div class="col-lg-7 text-center text-lg-start">
+          <h1 class="display-1 fw-bold lh-1 text-body-emphasis mb-3"><i>Route</i>Planner</h1>
+          <p class="col-lg-10 fs-4">Jah bless</p>
+        </div>
+        <div class="col-md-10 mx-auto col-lg-5 p-4 p-md-5 border rounded-3 bg-body-tertiary">
+          <div class="form-floating input-group mb-1">
+            <div class="input-group-prepend col-2 col-md-3">
+              <label class="input-group-text inputLeft" for="inputGroupSelect01">From: </label>
             </div>
-            <div>
-              <label>End Station:</label>
-              <select value={endStation} onChange={e => setEndStation(e.target.value)}>
-                {stations.map(station => (
-                  <option key={station.id} value={station.name}>{station.name}</option>
-                ))}
-              </select>
+            <select class="custom-select inputRight" value={startStation} onChange={e => setStartStation(e.target.value)}>
+              {stations.map(station => (
+                <option key={station.id} value={station.name}>{station.name}</option>
+              ))}
+            </select>
+          </div>
+
+          <div class="form-floating input-group mb-4">
+            <div class="input-group-prepend col-2 col-md-3">
+              <label class="input-group-text inputLeft" for="inputGroupSelect01">To: </label>
             </div>
-            <button onClick={planRoute}>Plan Route</button>
-            <div>
-              Shortest Path: {plannedRoute.join(' -> ')}
+            <select class="custom-select inputRight" value={endStation} onChange={e => setEndStation(e.target.value)}>
+              {stations.map(station => (
+                <option key={station.id} value={station.name}>{station.name}</option>
+              ))}
+            </select>
+          </div>
+
+          <div class="form-floating input-group mb-3">
+              <button class="rounded-4 submitBtn" onClick={planRoute}>Plan Route</button>
+          </div>
+          <div class="row">
+            <div class="col-lg-12">
+              Journey: {plannedRoute.join(' -> ')}
             </div>
-        </main>
+          </div>
+        </div>
       </div>
-  </div>
+    </div>
+    
   );
 }
 

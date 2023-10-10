@@ -60,30 +60,30 @@ export const stations = [
   
   export const routes = [
     //Blue Line
-    { id: 1, lineId: 1, stationId: 1, stationOrder: 1, isClosed: false },
-    { id: 2, lineId: 1, stationId: 2, stationOrder: 2, isClosed: false },
-    { id: 3, lineId: 1, stationId: 3, stationOrder: 3, isClosed: false },
-    { id: 4, lineId: 1, stationId: 9, stationOrder: 4, isClosed: false },
+    { id: 1, lineId: 1, stationId: 1, stationOrder: 1, stationClosed: false, lineClosed: false},
+    { id: 2, lineId: 1, stationId: 2, stationOrder: 2, stationClosed: false, lineClosed: false },
+    { id: 3, lineId: 1, stationId: 3, stationOrder: 3, stationClosed: false, lineClosed: false },
+    { id: 4, lineId: 1, stationId: 9, stationOrder: 4, stationClosed: false, lineClosed: false },
     //Pink Line
-    { id: 5, lineId: 2, stationId: 5, stationOrder: 1, isClosed: false },
-    { id: 6, lineId: 2, stationId: 4, stationOrder: 2, isClosed: false },
-    { id: 7, lineId: 2, stationId: 13, stationOrder: 3, isClosed: false },
-    { id: 8, lineId: 2, stationId: 8, stationOrder: 4, isClosed: false },
+    { id: 5, lineId: 2, stationId: 5, stationOrder: 1, stationClosed: false, lineClosed: false },
+    { id: 6, lineId: 2, stationId: 4, stationOrder: 2, stationClosed: false, lineClosed: false },
+    { id: 7, lineId: 2, stationId: 13, stationOrder: 3, stationClosed: false, lineClosed: false },
+    { id: 8, lineId: 2, stationId: 8, stationOrder: 4, stationClosed: false, lineClosed: false },
     //Red Line
-    { id: 9, lineId: 3, stationId: 6, stationOrder: 1, isClosed: false },
-    { id: 10, lineId: 3, stationId: 4, stationOrder: 2, isClosed: false },
-    { id: 11, lineId: 3, stationId: 3, stationOrder: 3, isClosed: false },
-    { id: 12, lineId: 3, stationId: 11, stationOrder: 4, isClosed: false },
+    { id: 9, lineId: 3, stationId: 6, stationOrder: 1, stationClosed: false, lineClosed: false },
+    { id: 10, lineId: 3, stationId: 4, stationOrder: 2, stationClosed: false, lineClosed: false },
+    { id: 11, lineId: 3, stationId: 3, stationOrder: 3, stationClosed: false, lineClosed: false },
+    { id: 12, lineId: 3, stationId: 11, stationOrder: 4, stationClosed: false, lineClosed: false },
     //Black Line
-    { id: 13, lineId: 4, stationId: 7, stationOrder: 1, isClosed: false },
-    { id: 14, lineId: 4, stationId: 13, stationOrder: 2, isClosed: false },
-    { id: 15, lineId: 4, stationId: 9, stationOrder: 3, isClosed: false },
-    { id: 16, lineId: 4, stationId: 10, stationOrder: 4, isClosed: false },
+    { id: 13, lineId: 4, stationId: 7, stationOrder: 1, stationClosed: false, lineClosed: false },
+    { id: 14, lineId: 4, stationId: 13, stationOrder: 2, stationClosed: false, lineClosed: false },
+    { id: 15, lineId: 4, stationId: 9, stationOrder: 3, stationClosed: false, lineClosed: false },
+    { id: 16, lineId: 4, stationId: 10, stationOrder: 4, stationClosed: false, lineClosed: false },
     //Circular Line
-    { id: 16, lineId: 5, stationId: 2, stationOrder: 1, isClosed: false },
-    { id: 17, lineId: 5, stationId: 4, stationOrder: 2, isClosed: false },
-    { id: 18, lineId: 5, stationId: 11, stationOrder: 3, isClosed: false },
-    { id: 19, lineId: 5, stationId: 12, stationOrder: 4, isClosed: false },
+    { id: 16, lineId: 5, stationId: 2, stationOrder: 1, stationClosed: false, lineClosed: false },
+    { id: 17, lineId: 5, stationId: 4, stationOrder: 2, stationClosed: false, lineClosed: false },
+    { id: 18, lineId: 5, stationId: 11, stationOrder: 3, stationClosed: false, lineClosed: false },
+    { id: 19, lineId: 5, stationId: 12, stationOrder: 4, stationClosed: false, lineClosed: false },
   ];
 
    const connectionGraph = {
@@ -104,4 +104,5 @@ export const stations = [
     M: { C: 1, D: 1, N: 1 },
     N: { B: 1, M: 1 },
 };
-export default connectionGraph
+
+export default connectionGraph;
