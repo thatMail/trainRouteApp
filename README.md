@@ -9,7 +9,7 @@ Shortest Path details: https://www.freecodecamp.org/news/dijkstras-shortest-path
 | stationId | stationName | isClosed |
 |----------|----------|----------|
 | INT PRIMARTY KEY AUTO_INCREMENT | CHAR(1) UNIQUE | BIT |
-<br>
+
 ```sql
 CREATE TABLE stations (
     stationId INT PRIMARY KEY AUTO_INCREMENT,
@@ -21,7 +21,7 @@ CREATE TABLE stations (
 | lineId | lineName | isClosed | 
 |----------|----------|----------|
 | INT PRIMARY KEY AUTO_INCREMENT | VARCHAR(20) UNIQUE NOT NULL | BIT |
-<br>
+
 ```sql
 CREATE TABLE lines (
     lineId INT PRIMARY KEY AUTO_INCREMENT,
@@ -31,12 +31,12 @@ CREATE TABLE lines (
 ```
 ### StaionRoutes
 Handles which Stations are in which lines, including stations with multiple lines. Makes use of FORIENG KEY values relating to Stations and Lines tables.
-<br>
+
 | stationLineID | stationId | lineId |
 |----------|----------|----------|
 | INT PRIMARY KEY AUTO_IMCREMENT | INT | INT |
 |  | FOREIGN KEY (stationId) REFERENCES stations(stationId) | FOREIGN KEY (lineId) REFERENCES lines(lineId)  |
-<br>
+
 ```sql
 CREATE TABLE stationRoutes (
     stationLineId INT PRIMARY KEY AUTO_INCREMENT,
