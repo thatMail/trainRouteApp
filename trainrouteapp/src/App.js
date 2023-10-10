@@ -22,9 +22,12 @@ function dijkstra(connectionGraph, start, closedStations, closedLines) {
     let currentNode = getClosestNode(shortestDistances, unvisitedNodes);
 
     for (let neighbor in connectionGraph[currentNode]) {
-        if (closedStations.includes(neighbor) || isPartOfClosedLine(currentNode, neighbor, closedLines, routes)) {
-            continue;  // Exclude closed stations and closed lines
-        }
+      if (
+        closedStations.includes(neighbor) 
+        && isPartOfDifferentClosedLine(currentNode, neighbor, closedLines, routes)
+      ) {
+          continue;  // Exclude routes that pass through closed stations on different lines
+      }
 
         let newDist = shortestDistances[currentNode] + connectionGraph[currentNode][neighbor];
         if (newDist < shortestDistances[neighbor]) {
@@ -57,6 +60,39 @@ function getClosestNode(distances, unvisitedNodes) {
       }
       return closestNode;
   }, null);
+}
+
+// work out of the path can continue through a closed station on the same line
+function isPartOfDifferentClosedLine(currentNode, neighbor, closedLines, routes) {
+  // Find the line that connects currentNode and neighbor
+  const route = routes.find(route => 
+      (route.start_station === currentNode && route.end_station === neighbor) || 
+      (route.start_station === neighbor && route.end_station === currentNode)
+  );
+
+  // Check if this line is in the list of closed lines
+  const lineIsClosed = route && closedLines.includes(route.line);
+
+  // If the line is not closed, then it's not part of a different closed line
+  if (!lineIsClosed) return false;
+
+  // Now, check if currentNode and neighbor are part of the same closed line
+  const neighborLines = routes.filter(route => 
+      route.start_station === neighbor || route.end_station === neighbor
+  ).map(route => route.line);
+
+  const currentNodeLines = routes.filter(route => 
+      route.start_station === currentNode || route.end_station === currentNode
+  ).map(route => route.line);
+
+  // If both currentNode and neighbor share a line that's not closed, then they are part of the same open line
+  for (let line of currentNodeLines) {
+      if (neighborLines.includes(line) && !closedLines.includes(line)) {
+          return false;
+      }
+  }
+
+  return true;
 }
 
 function App() {
@@ -152,12 +188,12 @@ return (
           <div className="col-lg-12">
             <h3>Journey: </h3>
             <div className="journeyResult">
-              {/** Fragment rather than a join to avoid concatenation (lets us use the icon) */}
+              {/** Fragment rather than a join to avoid concatenation (lets us use the icon), added demarkation of closed stations in journey */}
               {plannedRoute.map((route, index) => (
                 <React.Fragment key={index}>
-                  {route}
+                  {route}{closedStations.includes(route) && "*"}
                   {index !== plannedRoute.length - 1 && 
-                      <FontAwesomeIcon icon={faArrowRight} size="2xs" style={{ color: "#ffffff", paddingRight: '1rem', paddingLeft: '1rem' }}/>
+                    <FontAwesomeIcon icon={faArrowRight} size="2xs" style={{ color: "#ffffff", paddingRight: '1rem', paddingLeft: '1rem' }}/>
                   }
                 </React.Fragment>
               ))}
