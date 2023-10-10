@@ -10,7 +10,7 @@ Shortest Path details: https://www.freecodecamp.org/news/dijkstras-shortest-path
 |----------|----------|----------|
 | INT PRIMARTY KEY AUTO_INCREMENT | CHAR(1) UNIQUE | BIT |
 <br>
-```sql
+```
 
 CREATE TABLE stations (
     stationId INT PRIMARY KEY AUTO_INCREMENT,
@@ -24,7 +24,7 @@ CREATE TABLE stations (
 |----------|----------|----------|
 | INT PRIMARY KEY AUTO_INCREMENT | VARCHAR(20) UNIQUE NOT NULL | BIT |
 <br>
-```sql
+```
 
 CREATE TABLE lines (
     lineId INT PRIMARY KEY AUTO_INCREMENT,
@@ -41,7 +41,7 @@ Handles which Stations are in which lines, including stations with multiple line
 | INT PRIMARY KEY AUTO_IMCREMENT | INT | INT |
 |  | FOREIGN KEY (stationId) REFERENCES stations(stationId) | FOREIGN KEY (lineId) REFERENCES lines(lineId)  |
 <br>
-```sql
+```
 
 CREATE TABLE stationRoutes (
     stationLineId INT PRIMARY KEY AUTO_INCREMENT,
@@ -60,7 +60,7 @@ Handles station order for a line
 | INT PRIMARY KEY AUTO_INCREMENT | INT | INT | INT NOT NULL |
 | | FOREIGN KEY (lineId) REFERENCES lines(lineId) | FOREIGN KEY (stationId) REFERENCES stations(stationId) | |
 
-```sql
+```
 
 CREATE TABLE route (
     routeId INT PRIMARY KEY AUTO_INCREMENT,
@@ -75,7 +75,7 @@ CREATE TABLE route (
 
 ### Views for closed Stations or Lines
 #### Closed Stations:
-```sql
+```
 
 CREATE VIEW closedStations AS
 SELECT id, name
@@ -84,7 +84,7 @@ WHERE isClosed = TRUE;
 
 ```
 #### Closed Lines:
-```sql
+```
 
 CREATE VIEW closedLines AS
 SELECT id, name
