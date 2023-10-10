@@ -99,30 +99,30 @@ function App() {
 };
 
 return (
-  <div class="container col-xl-10 col-xxl-8 px-4">
+  <div className="container col-xl-10 col-xxl-8 px-4">
     {/** Introduction row */}
-    <div class="row align-items-center g-lg-5 pt-5">
-      <div class="col-lg-7 text-center text-lg-start">
-        <h1 class="display-1 fw-bold lh-1 text-body-emphasis mb-3"><i>Route</i>Planner</h1>
-        <p class="col-lg-10 fs-4">A prototype Route Planner for the underground train network shown below:</p>
+    <div className="row align-items-center g-lg-5 pt-5">
+      <div className="col-lg-7 text-center text-lg-start">
+        <h1 className="display-1 fw-bold lh-1 text-body-emphasis mb-3"><i>Route</i>Planner</h1>
+        <p className="col-lg-10 fs-4">A prototype Route Planner for the underground train network shown below:</p>
       </div>
     </div>
     {/** Main row */}
-    <div class="row align-items-start g-lg-5 pb-5">
-      <div class="col-lg-7">
-        <img src={map} class="img-fluid mb-4" alt="Map"></img>
-        <p class="col-lg-10 fs-6">The route planner makes use of Dijkstra's <i>Shortest Path Algorithm</i> to work out the best route between stations on the network, more information on the algorithm can
+    <div className="row align-items-start g-lg-5 pb-5">
+      <div className="col-lg-7">
+        <img src={map} className="img-fluid mb-4" alt="Map"></img>
+        <p className="col-lg-10 fs-6">The route planner makes use of Dijkstra's <i>Shortest Path Algorithm</i> to work out the best route between stations on the network, more information on the algorithm can
         be found <a href="https://www.freecodecamp.org/news/dijkstras-shortest-path-algorithm-visual-introduction/">here</a></p>
       </div>
       {/** Journey Seletcion */} 
-      <div class="col-lg-5 p-4 p-md-5 border rounded-3 bg-body-tertiary">
-        <h1 class="display-6 fw-bold lh-1 text-body-emphasis mb-4"><i>My</i>Journey</h1>
+      <div className="col-lg-5 p-4 p-md-5 border rounded-3 bg-body-tertiary">
+        <h1 className="display-6 fw-bold lh-1 text-body-emphasis mb-4"><i>My</i>Journey</h1>
         {/** From: */} 
-        <div class="form-floating input-group mb-1">
-          <div class="input-group-prepend col-2 col-md-3">
-            <label class="input-group-text inputLeft" for="inputGroupSelect01">From: </label>
+        <div className="form-floating input-group mb-1">
+          <div className="input-group-prepend col-2 col-md-3">
+            <label className="input-group-text inputLeft" for="inputGroupSelect01">From: </label>
           </div>
-          <select class="custom-select inputRight" value={startStation} onChange={e => setStartStation(e.target.value)}>
+          <select className="custom-select inputRight" value={startStation} onChange={e => setStartStation(e.target.value)}>
             {Object.keys(connectionGraph).map(station => (
                 <option key={station} value={station} disabled={closedStations.includes(station)}>
                     {station} {closedStations.includes(station) ? "(Closed)" : ""}
@@ -131,11 +131,11 @@ return (
           </select>
         </div>
         {/** To: */} 
-        <div class="form-floating input-group mb-4">
-          <div class="input-group-prepend col-2 col-md-3">
-            <label class="input-group-text inputLeft" for="inputGroupSelect01">To: </label>
+        <div className="form-floating input-group mb-4">
+          <div className="input-group-prepend col-2 col-md-3">
+            <label className="input-group-text inputLeft" for="inputGroupSelect01">To: </label>
           </div>
-          <select class="custom-select inputRight" value={endStation} onChange={e => setEndStation(e.target.value)}>
+          <select className="custom-select inputRight" value={endStation} onChange={e => setEndStation(e.target.value)}>
             {Object.keys(connectionGraph).map(station => (
                 <option key={station} value={station} disabled={closedStations.includes(station)}>
                     {station} {closedStations.includes(station) ? "(Closed)" : ""}
@@ -144,12 +144,12 @@ return (
           </select>
         </div>
         {/** Plan Route Button */}  
-        <div class="form-floating input-group mb-4">
-            <button class="rounded-4 submitBtn" onClick={planRoute}>Plan Route</button>
+        <div className="form-floating input-group mb-4">
+            <button className="rounded-4 submitBtn" onClick={planRoute}>Plan Route</button>
         </div>
         {/** Route Results */}      
         <div id="routeResults" className={`${isActive ? "returnedRoute" : ""} row pt-2`}>
-          <div class="col-lg-12">
+          <div className="col-lg-12">
             <h3>Journey: </h3>
             <div className="journeyResult">
               {/** Fragment rather than a join to avoid concatenation (lets us use the icon) */}
@@ -167,15 +167,15 @@ return (
         
         <br></br>
         {/** Debug */}
-        <div class="accordion accordion-flush" id="debugMenu">
-          <div class="accordion-item">
-            <h2 class="accordion-header" id="flush-headingOne">
-              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+        <div className="accordion accordion-flush" id="debugMenu">
+          <div className="accordion-item">
+            <h2 className="accordion-header" id="flush-headingOne">
+              <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
                 Debug Menu
               </button>
             </h2>
-            <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#debugMenu">
-              <div class="accordion-body">
+            <div id="flush-collapseOne" className="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#debugMenu">
+              <div className="accordion-body">
                 {/* UI to toggle closed stations */}
                 <div>
                       <h6>Toggle Closed Stations</h6>
@@ -202,8 +202,8 @@ return (
       </div>
     </div>
     {/** Footer */}
-    <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 mt-4 border-top">
-      <p class="col-md-4 mb-0 text-muted"><a class="footerLink" href="https://github.com/thatMail/trainRouteApp"><FontAwesomeIcon icon={faGithub} size="xl" style={{ paddingRight: '1rem' }} />Luke Mayell</a></p>
+    <footer className="d-flex flex-wrap justify-content-between align-items-center py-3 mt-4 border-top">
+      <p className="col-md-4 mb-0 text-muted"><a className="footerLink" href="https://github.com/thatMail/trainRouteApp"><FontAwesomeIcon icon={faGithub} size="xl" style={{ paddingRight: '1rem' }} />Luke Mayell</a></p>
     </footer>
   </div>
   );

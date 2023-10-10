@@ -80,10 +80,10 @@ export const stations = [
     { id: 15, lineId: 4, stationId: 9, stationOrder: 3, stationClosed: false, lineClosed: false },
     { id: 16, lineId: 4, stationId: 10, stationOrder: 4, stationClosed: false, lineClosed: false },
     //Circular Line
-    { id: 16, lineId: 5, stationId: 2, stationOrder: 1, stationClosed: false, lineClosed: false },
-    { id: 17, lineId: 5, stationId: 4, stationOrder: 2, stationClosed: false, lineClosed: false },
-    { id: 18, lineId: 5, stationId: 11, stationOrder: 3, stationClosed: false, lineClosed: false },
-    { id: 19, lineId: 5, stationId: 12, stationOrder: 4, stationClosed: false, lineClosed: false },
+    { id: 17, lineId: 5, stationId: 2, stationOrder: 1, stationClosed: false, lineClosed: false },
+    { id: 18, lineId: 5, stationId: 4, stationOrder: 2, stationClosed: false, lineClosed: false },
+    { id: 19, lineId: 5, stationId: 11, stationOrder: 3, stationClosed: false, lineClosed: false },
+    { id: 20, lineId: 5, stationId: 12, stationOrder: 4, stationClosed: false, lineClosed: false },
   ];
 
    const connectionGraph = {
