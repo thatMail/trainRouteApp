@@ -74,8 +74,49 @@ WHERE isClosed = TRUE;
 ```
 #### Closed Lines:
 ```sql
+
 CREATE VIEW closedLines AS
 SELECT id, name
 FROM lines
 WHERE isClosed = TRUE;
+```
+
+## Improvements
+- Move connectionsGraph constant data in the Routes Table
+- Use table to store route of each station's connections, not just station, line, and order of the line.
+- This should let us remove the need for some of the helper functions which the algorithm is currently reliant on
+- New db structure to accomodate:
+  
+  | routeId | startStationId | endStationId | lineId | distance |
+  |----------|----------|----------|----------|----------|
+  | Primary Key | Foreing key | Foreing key | Foreing key | | |
+  | | Stations(stationId) | Stations(stationId) | Lines(lineID) | Connection weight |
+
+- Distance column replaces the connectionGraph. This structure change should increase efficiancy:
+  - Find all stations directly connected to a given station //required for Algorithm.
+  - Determine the line of any given direct connection.
+  - Easier to detect if we're changing line between stations, if so we can apply a pre-determined penalty value for the line change.
+ 
+- Adjust Dijkstra's Algorithm to handle the new routes table data
+- Improve handling for closed stations, with the additional connection data for each station journey's will only be able to continue through a colsed station on the same line.
+- Penalty weighting is now considered for changing lines, this should reflect a more 'real world' use cases. Shorter journey's with line changes will still win if the journey is still shorter including the penalty!
+#### Plan for Dijkstra's Algorithm iteration
+```
+function findShortestPath(startStation, endStation):
+    initialize distances with infinity for all stations except startStation
+    initialize priority queue with startStation (distance 0)
+    
+    while priority queue is not empty:
+        currentStation = pop station with smallest distance from priority queue
+        for each neighbouring station of currentStation:
+            if it's on the same line:
+                if nextStation is open or nextStation is on the route to endStation on the same line:
+                    update distance if new distance is smaller
+                    add nextStation to priority queue
+            else:
+                consider the penalty for changing the line
+                update distance if new distance (including penalty) is smaller
+                add nextStation to priority queue
+    
+    return path to endStation
 ```
